@@ -1,10 +1,31 @@
 # da-cloner
 
+## Paso 2: Descargar el audio del listado de vídeos
+* Instalar dependencia: pip install yt-dlp
+* Da un error, necesitamos configurar ffmpeg.
+    - Lo descargamos en .zip desde: https://www.gyan.dev/ffmpeg/builds/
+    - Lo descomprimimos pegamos el diretorio bin en el proyecto /downloader/ffmpg/bin
+
 ## Paso 1: Recopilar información de Youtube
 
 * Instalación de dependencias:
     - pip install python-dotenv google-api-python-client
 * En youtube/youtube_search.py tenemos el script que rastrea los vídeos
+* pytube falla. Intentamos arreglarlo con:
+    - C:\Users\Alday Lab\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytube\cipher.py
+
+* Debemos filtrar la búsqueda para evitar videos que no sean del propio personaje hablando. Podemos filtrar con terminos tipo "entrevista" o "conferencia"
+* Sería lo ideal poder acceder a las "tags" o "etiquetas" asociadas a ese vídeo para luego categorizar el pensamiento en diversos temas de esa persona
+
+PASOS CONCEPTUALES:
+
+- Recibir el nombre del personaje público
+- Filtrar para obtener conferencias, entrevistas, ponencias
+- Obtener, además de los vídeos, descripciones y etiquetas
+
+
+-----------------------------
+
 
 ## Entendiendo el reto:
 

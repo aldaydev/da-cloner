@@ -1,1 +1,3 @@
 .env
+audios/*
+__pycache__/
