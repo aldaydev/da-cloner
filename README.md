@@ -1,5 +1,7 @@
 # da-cloner
 
+Ejecutar el entorno en power shell: .\venv\Scripts\Activate
+
 ## Paso 4: Identificar y recopilar las palabras del entrevistado
 
 ## Paso 3: Transcribir los audios y guardarlos en json
@@ -8,7 +10,9 @@
 ## Paso 3: Diarización: Dividir el audio entre speakers + Transcripción
 * Instalar dependencias: 
     pip install git+https://github.com/m-bain/whisperx
-    pip install torchaudio
+    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+    pip install faster-whisper
+    pip install transformers
     pip install ffmpeg-python
 (ME DA ERROR POR VERSIÓN DE PYTHON, TENGO QUE HACER DOWNGRADE) => branch develope
 

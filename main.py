@@ -1,37 +1,46 @@
+from faster_whisper import WhisperModel
+from pyannote.audio import Pipeline
 import os
-from youtube.youtube_searcher import search_youtube
-from downloader.audio_downloader import download_audio
 
-MAX_RESULTS = 3  # Cambia este número para limitar la cantidad de vídeos a procesar
+def diarize_and_transcribe(audio_paths=None):
+    # Leer el token de Hugging Face desde variable de entorno
+    hf_token = os.environ.get("HUGGINGFACE_TOKEN")
 
-def main():
-    personaje = input("Introduce el nombre del personaje: ")
+    if not hf_token:
+        print("❌ ERROR: La variable de entorno HUGGINGFACE_TOKEN no está definida.")
+        return
 
-    print("🔍 Buscando vídeos relacionados...")
-    resultados = search_youtube(personaje, max_results=MAX_RESULTS)
+    # Si no se especifica audio_paths, usar audio-test.wav por defecto
+    if audio_paths is None:
+        audio_paths = ['audios/audio-test.wav']
 
-    audios_descargados = []
+    # Cargar modelo Whisper
+    model = WhisperModel("medium", device="cpu", compute_type="int8")
 
-    for resultado in resultados:
-        url = resultado["url"]
-        print(f"🎬 Procesando: {resultado['title']}")
+    # Cargar pipeline de diarización
+    pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization",
+                                        use_auth_token=hf_token)
 
-        # Descargar audio en wav
-        audio_path = download_audio(url)
-        
-        if not audio_path:
-            print("❌ No se pudo descargar el audio.")
-            continue
+    for path in audio_paths:
+        print(f"\n🎧 Procesando archivo: {path}")
 
-        audios_descargados.append(audio_path)
+        # Aplicar diarización
+        diarization = pipeline(path)
 
-    print("✅ Todos los audios han sido descargados.")
-    print("Audios disponibles para el siguiente paso:")
-    for audio_file in audios_descargados:
-        print(f" - {audio_file}")
+        # Mostrar segmentos de speakers
+        print("🔊 Diarización:")
+        for turn, _, speaker in diarization.itertracks(yield_label=True):
+            print(f"🗣️ {speaker}: [{turn.start:.1f}s - {turn.end:.1f}s]")
 
-    # Aquí iría el siguiente paso, pasando la lista completa:
-    # diarize_and_transcribe(audios_descargados)
+        # Transcripción
+        print("\n📝 Transcripción:")
+        segments, _ = model.transcribe(path, vad_filter=True)
 
-if __name__ == "__main__":
-    main()
+        for segment in segments:
+            print(f"[{segment.start:.1f}s - {segment.end:.1f}s] {segment.text.strip()}")
+
+        print("\n" + "-" * 40)
+
+# Permitir ejecución directa
+if __name__ == '__main__':
+    diarize_and_transcribe()

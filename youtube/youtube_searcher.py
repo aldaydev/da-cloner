@@ -49,6 +49,9 @@ def search_youtube(query, max_results=5):
         if duration < 300:
             continue
 
+        # if duration < 240 or duration > 600:
+        #     continue
+
         url = f"https://www.youtube.com/watch?v={video_id}"
 
         videos.append({

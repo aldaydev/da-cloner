@@ -10,8 +10,10 @@ def clean_folder(folder):
         return
     
     for archivo in archivos:
-        # Saltar el archivo .gitkeep
-        if os.path.basename(archivo) == '.gitkeep':
+        nombre_archivo = os.path.basename(archivo)
+        
+        # Saltar archivos que no queremos eliminar
+        if nombre_archivo in ['.gitkeep', 'audio-test.wav']:
             print(f"Saltando archivo: {archivo}")
             continue
         
@@ -23,4 +25,3 @@ def clean_folder(folder):
 
 if __name__ == '__main__':
     clean_folder('audios')
-    clean_folder(os.path.join('audios', 'cleaned'))
