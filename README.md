@@ -10,6 +10,8 @@
     pip install git+https://github.com/m-bain/whisperx
     pip install torchaudio
     pip install ffmpeg-python
+(ME DA ERROR POR VERSIÓN DE PYTHON, TENGO QUE HACER DOWNGRADE) => branch develope
+
 * IA propone tener una voz de referencia y así identificar. Se podría estudiar pero es más complicado.
 * De momento trabajaremos filtrando los contenidos de las voces y comprobando ciertas cosas:
     - El speaker con mayor % de palabras es MUY PROBABLE que sea el entrevistado o quien nos interesa
@@ -34,14 +36,14 @@
     - C:\Users\Alday Lab\AppData\Local\Programs\Python\Python313\Lib\site-packages\pytube\cipher.py
 
 * Debemos filtrar la búsqueda para evitar videos que no sean del propio personaje hablando. Podemos filtrar con terminos tipo "entrevista" o "conferencia"
-* Sería lo ideal poder acceder a las "tags" o "etiquetas" asociadas a ese vídeo para luego categorizar el pensamiento en diversos temas de esa persona
+* Sería lo ideal poder acceder a las "tags" o "etiquetas" asociadas a ese vídeo para luego categorizar el pensamiento en diversos temas de esa persona (Inutil)
 
 PASOS CONCEPTUALES:
 
 - Recibir el nombre del personaje público
 - Filtrar para obtener conferencias, entrevistas, ponencias, podcast...
 - Obtener, además de los vídeos, descripciones y etiquetas (inutil)
-- Filtrar para descargar reels
+- Filtrar para no descargar reels
 
 
 -----------------------------
