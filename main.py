@@ -1,34 +1,37 @@
-from youtube.youtube_searcher import youtube_search
+import os
+from youtube.youtube_searcher import search_youtube
 from downloader.audio_downloader import download_audio
 
+MAX_RESULTS = 3  # Cambia este número para limitar la cantidad de vídeos a procesar
+
 def main():
-    query = input("🔍 Introduce el nombre de la persona o tema: ").strip()
-    if not query:
-        print("⚠️ No introdujiste una búsqueda.")
-        return
+    personaje = input("Introduce el nombre del personaje: ")
 
-    max_results = 5
-    print("\n🔎 Buscando vídeos en YouTube...\n")
-    videos = youtube_search(query, max_results)
+    print("🔍 Buscando vídeos relacionados...")
+    resultados = search_youtube(personaje, max_results=MAX_RESULTS)
 
-    if not videos:
-        print("❌ No se encontraron vídeos.")
-        return
+    audios_descargados = []
 
-    print(f"\n📋 Se encontraron {len(videos)} vídeos:\n")
-    for i, video in enumerate(videos, 1):
-        print(f"{i}. {video['title']}\n   {video['url']}\n")
+    for resultado in resultados:
+        url = resultado["url"]
+        print(f"🎬 Procesando: {resultado['title']}")
 
-    confirm = input("¿Quieres descargar el audio de estos vídeos? (s/n): ").strip().lower()
-    if confirm != 's':
-        print("❌ Descarga cancelada.")
-        return
+        # Descargar audio en wav
+        audio_path = download_audio(url)
+        
+        if not audio_path:
+            print("❌ No se pudo descargar el audio.")
+            continue
 
-    print("\n⬇️ Iniciando descarga de audios...\n")
-    for i, video in enumerate(videos, 1):
-        print(f"{i}. Descargando: {video['title']}")
-        download_audio(video["url"])
-    print("\n✅ Descargas completadas.")
+        audios_descargados.append(audio_path)
+
+    print("✅ Todos los audios han sido descargados.")
+    print("Audios disponibles para el siguiente paso:")
+    for audio_file in audios_descargados:
+        print(f" - {audio_file}")
+
+    # Aquí iría el siguiente paso, pasando la lista completa:
+    # diarize_and_transcribe(audios_descargados)
 
 if __name__ == "__main__":
     main()

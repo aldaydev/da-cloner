@@ -9,7 +9,7 @@ API_KEY = os.getenv("YOUTUBE_API_KEY")
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 
-def youtube_search(query, max_results=5):
+def search_youtube(query, max_results=5):
     # 🔍 Enriquecer el término de búsqueda
     enriched_query = f'"{query}" entrevista OR conferencia OR charla OR ponencia OR podcast'
 
@@ -45,6 +45,10 @@ def youtube_search(query, max_results=5):
         channel = snippet.get("channelTitle", "")
         duration = isodate.parse_duration(content_details["duration"]).total_seconds()
 
+        # Filtro: solo incluir vídeos de al menos 5 minutos
+        if duration < 300:
+            continue
+
         url = f"https://www.youtube.com/watch?v={video_id}"
 
         videos.append({
@@ -55,6 +59,7 @@ def youtube_search(query, max_results=5):
             "channel": channel,
             "duration_seconds": duration
         })
+
 
     return videos
 

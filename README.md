@@ -1,5 +1,24 @@
 # da-cloner
 
+## Paso 4: Identificar y recopilar las palabras del entrevistado
+
+## Paso 3: Transcribir los audios y guardarlos en json
+* Instalar dependencia "whisper": pip install -U openai-whisper
+
+## Paso 3: Diarización: Dividir el audio entre speakers + Transcripción
+* Instalar dependencias: 
+    pip install git+https://github.com/m-bain/whisperx
+    pip install torchaudio
+    pip install ffmpeg-python
+* IA propone tener una voz de referencia y así identificar. Se podría estudiar pero es más complicado.
+* De momento trabajaremos filtrando los contenidos de las voces y comprobando ciertas cosas:
+    - El speaker con mayor % de palabras es MUY PROBABLE que sea el entrevistado o quien nos interesa
+    - La persona que diga repetidas veces el nombre del entrevistado será el entrevistador
+    - 
+
+## Paso 3: Limpiar los audios (DESCARTADO, NO FUNCIONA BIEN)
+* Instalar dependencias: pip install pydub noisereduce librosa soundfile
+
 ## Paso 2: Descargar el audio del listado de vídeos
 * Instalar dependencia: pip install yt-dlp
 * Da un error, necesitamos configurar ffmpeg.
@@ -20,11 +39,21 @@
 PASOS CONCEPTUALES:
 
 - Recibir el nombre del personaje público
-- Filtrar para obtener conferencias, entrevistas, ponencias
-- Obtener, además de los vídeos, descripciones y etiquetas
+- Filtrar para obtener conferencias, entrevistas, ponencias, podcast...
+- Obtener, además de los vídeos, descripciones y etiquetas (inutil)
+- Filtrar para descargar reels
 
 
 -----------------------------
+
+## Resumen de los pasos:
+
+1. Buscar contenido de youtube (entrevistas, podcast, conferencias...)
+2. Obtener los audios en mp3
+3. Mejorar la calidad de los audios para aplicar "speaker diarization"
+4. Aplicar "speaker diarization"
+
+----------------------------
 
 
 ## Entendiendo el reto:
