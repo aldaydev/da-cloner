@@ -4,8 +4,45 @@ Ejecutar el entorno en power shell: .\venv\Scripts\Activate
 
 ## Paso 4: Identificar y recopilar las palabras del entrevistado
 
-## Paso 3: Transcribir los audios y guardarlos en json
-* Instalar dependencia "whisper": pip install -U openai-whisper
+## Paso 3: Seleccionar el speaker del que queremos obtener información
+
+Te cuento yo el programa que tengo en mente. Tenemos varias variables:
+
+MORE_WORDS => asignaremos el speaker que tiene un % mayor de palabras
+MORE_QUESTIONS => asignaremos el speaker con más preguntas (¿?)
+INTERPETALLE => si un speaker menciona el alguna de las palabras de la persona buscada (ejemplo Javier, o Javier Gonzalez, O Gonzalez... todas las combinaciones), lo asignaremos a esta variable
+
+Entonces generamos una serie de condicionales. Te pongo un ejemplo. Ten en cuenta que esto es pseudo código:
+
+Imaginemos que hemos hecho esto:
+MORE_WORDS = SPEAKER_01
+MORE_QUESTIONS = SPEAKER_00
+INTERPELLATE = SPEAKER_00
+
+Y hacemos un if (pseudocodigo) que hace algo así
+IF MORE_WORDS !== MORE_QUESTIONS  && MORE_QUESTIONS   == INTERPETALLE 
+
+Lo que estaríamos diciendo es: Si el que ha dicho más palabras no coincide con el que ha hecho más preguntas y además el que ha hecho más preguntas es el mismo que ha "interpelado" (dicho el nombre del personaje). Podríamos decir que es MUY, MUY PROBABLE que el SPEAKER_01 sea el entrevistado ¿no?
+
+Variables que tendremos:
+- SPEAKER_00
+- SPEAKER_01 
+- TARGET => Meteremos el speaker que hayamos identificado como el que nos interesa
+- MORE_WORDS => Meteremos en esta variable al speaker con más % de palabras
+- INTERPELLATE => Meteremos a la persona que interpela varias veces el nombre del personaje
+|
+|__ Ejemplo:
+    if MORE_WORDS == SPEAKER__01 && INTERPELLATE == SPEAKER__00
+
+Considero muy complicado saber 100% quién es el entrevistado y quién el entrevistado. Creo que sería interesante hacerlo por "probabilidad".
+¿Cómo abordarlo?
+* IA propone tener una voz de referencia y así identificar. Se podría estudiar pero es más complicado.
+* De momento trabajaremos filtrando los contenidos de las voces y comprobando ciertas cosas:
+    - El speaker con mayor % de palabras es MUY PROBABLE que sea el entrevistado y quien nos interesa
+    - La persona que diga repetidas veces el nombre del entrevistado será el entrevistador
+    - Si un speaker dice el nombre de nuestro personaje y el siguiente segmento es otro speaker, el último será MUY PROBABLEMENTE el entrevistado (en realidad no tiene por qué cumplirse)
+    - Quién diga la palabra bienvenido/a tendrá MUCHAS PROBABILIDADES de ser el entrevistador
+* Existiría una casuística compleja => conversación a 3. En principio partiremos de entrevistas y ya lo estudiaremos
 
 ## Paso 3: Diarización: Dividir el audio entre speakers + Transcripción
 * Instalar dependencias: 
@@ -16,11 +53,6 @@ Ejecutar el entorno en power shell: .\venv\Scripts\Activate
     pip install ffmpeg-python
 (ME DA ERROR POR VERSIÓN DE PYTHON, TENGO QUE HACER DOWNGRADE) => branch develope
 
-* IA propone tener una voz de referencia y así identificar. Se podría estudiar pero es más complicado.
-* De momento trabajaremos filtrando los contenidos de las voces y comprobando ciertas cosas:
-    - El speaker con mayor % de palabras es MUY PROBABLE que sea el entrevistado o quien nos interesa
-    - La persona que diga repetidas veces el nombre del entrevistado será el entrevistador
-    - 
 
 ## Paso 3: Limpiar los audios (DESCARTADO, NO FUNCIONA BIEN)
 * Instalar dependencias: pip install pydub noisereduce librosa soundfile
