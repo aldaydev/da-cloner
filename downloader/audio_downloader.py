@@ -45,3 +45,17 @@ def download_audio(url, output_folder='audios'):
         print(f"❌ Error al descargar: {e}")
 
     return None
+
+# --- MODO PRUEBA AISLADA ---
+if __name__ == "__main__":
+    ejemplos = [
+        "https://youtu.be/NrDSEEcOW6Y?si=ios9mvn69kW2JGcS",  # Ejemplo Javier González Recuenco
+        "https://youtu.be/oelb294jvGg?si=8SxsBhEjLu8zicAW"   # Puedes añadir más URLs aquí
+    ]
+    for url in ejemplos:
+        print(f"\nDescargando audio de: {url}")
+        resultado = download_audio(url)
+        if resultado:
+            print(f"✅ Audio descargado en: {resultado}")
+        else:
+            print("❌ Error en la descarga.")

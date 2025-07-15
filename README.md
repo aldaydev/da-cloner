@@ -5,8 +5,9 @@
 1. Recopilar vídeos de youtube
     - Entrada: nombre del personaje
     - Deben incluir el nombre introducido bien en el nombre, bien en la descripción
+    - Incluimos ciertos términos como "entrevista" o "conferencia" para filtrar resultados
     - Si no hay un número mínimo horas, se lo indicamos al usuario y paramos el programa
-    - Salida: Colección de objetos con los datos de cada vídeo (url)
+    - Salida: Colección de objetos con los datos de cada vídeo (nombre, url...)
 
 2. Descargar los audios
     - Entrada: colección con las urls
@@ -31,7 +32,14 @@
     - Salida: obtendremos un jsonL para poder entrenar un modelo
 
 
+**** PROBANDO DE MANERA AISLADA ****
+
 Ejecutar el entorno en power shell: .\venv\Scripts\Activate
+
+python youtube/youtube_searcher.py
+python downloader/audio_downloader.py
+python transcriber/transcriber.py
+
 
 ## Paso 4: Identificar y recopilar las palabras del entrevistado
 

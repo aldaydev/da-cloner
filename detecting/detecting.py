@@ -47,23 +47,22 @@ def detect_roles_from_files(file_paths, personaje):
         print("INTERPELLATE =>", interpellate)
         print("WELCOME_SPEAKER =>", welcome_speaker)
 
+
         # Lógica de inferencia
+        interviewer = None
+        interviewee = None
+        # Caso 1: los tres factores coinciden y es distinto de more_words
         if more_questions == interpellate and more_questions == welcome_speaker and more_words != more_questions:
             interviewer = more_questions
+        else:
+            # Caso 2: algún speaker coincide en al menos dos de los tres factores y es distinto de more_words
+            candidates = [more_questions, interpellate, welcome_speaker]
+            for s in speakers:
+                if candidates.count(s) >= 2 and s != more_words:
+                    interviewer = s
+                    break
+        if interviewer:
             interviewee = [s for s in speakers if s != interviewer][0]
-        # elif more_questions == interpellate:
-        #     interviewer = more_questions
-        #     interviewee = [s for s in speakers if s != interviewer][0]
-        # elif more_questions == more_words:
-        #     interviewer = more_questions
-        #     interviewee = [s for s in speakers if s != interviewer][0]
-        # elif interpellate == more_words:
-        #     interviewer = interpellate
-        #     interviewee = [s for s in speakers if s != interviewer][0]
-        # else:
-        #     interviewer = more_questions
-        #     interviewee = [s for s in speakers if s != interviewer][0]
-
         resultados[file_path] = {
             "interviewer": interviewer,
             "interviewee": interviewee

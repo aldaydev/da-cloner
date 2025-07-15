@@ -1,0 +1,353 @@
+{
+  "personaje": "Ejemplo de Personaje",
+  "video_title": "Audio de prueba local",
+  "video_url": "https://youtube.com/watch?v=ejemplo",
+  "audio_file": "audios/audio-test.wav",
+  "speakers": [
+    {
+      "speaker": "SPEAKER_00",
+      "segments": [
+        {
+          "start": 0.0,
+          "end": 7.8,
+          "text": "Bienvenidos, estáis en Diálogos Cardón, en la bolsa de Madrid, en el plató de estrategias"
+        },
+        {
+          "start": 7.8,
+          "end": 12.48,
+          "text": "de inversión. Yo tengo a un amigo al que voy a entrevistar, que es Javier Recuenco,"
+        },
+        {
+          "start": 12.48,
+          "end": 17.42,
+          "text": "que es una personalidad en el mundo de la estrategia para hacer las cosas bien"
+        },
+        {
+          "start": 17.42,
+          "end": 21.08,
+          "text": "en entornos conflictivos. Javier, bienvenido."
+        },
+        {
+          "start": 21.08,
+          "end": 24.52,
+          "text": "Un placer, Rodolfo. Me gustaría que nos contaras un poco"
+        },
+        {
+          "start": 24.52,
+          "end": 27.32,
+          "text": "¿Qué es esto de complex problem solving?"
+        },
+        {
+          "start": 61.2,
+          "end": 65.4,
+          "text": "¿Y colaboráis mucho con la consultoría o realmente es completamente independiente?"
+        },
+        {
+          "start": 103.24,
+          "end": 106.44,
+          "text": "¿Y qué perfiles necesitas de forma habitual?"
+        },
+        {
+          "start": 163.44,
+          "end": 167.16,
+          "text": "problema que determina el equipo. Yo sé que en tu caso casi todo lo que"
+        },
+        {
+          "start": 167.16,
+          "end": 171.64,
+          "text": "haces es secreto o súper secreto. Entonces me gustaría que pusieras un"
+        },
+        {
+          "start": 171.64,
+          "end": 175.0,
+          "text": "par de ejemplos sin trasladar la parte..."
+        },
+        {
+          "start": 237.52,
+          "end": 240.96,
+          "text": "Sobre todo grandes empresas, empresas familiares, tímenes..."
+        }
+      ]
+    },
+    {
+      "speaker": "SPEAKER_01",
+      "segments": [
+        {
+          "start": 27.32,
+          "end": 35.8,
+          "text": "Bueno, pues el complex problem solving es el resultado de muchos años que llevo involucrados"
+        },
+        {
+          "start": 35.8,
+          "end": 39.72,
+          "text": "en todo lo que tiene que ver en resolución de problemática empresarial, de la cual"
+        },
+        {
+          "start": 39.72,
+          "end": 46.36,
+          "text": "no hay precedente. O sea, fundamentalmente, lo que ya está hecho o que requiere de expertos"
+        },
+        {
+          "start": 46.36,
+          "end": 50.44,
+          "text": "entra dentro del reino de la consultoría, por decir de alguna manera, y el complex"
+        },
+        {
+          "start": 50.76,
+          "end": 55.56,
+          "text": "problem solving lo que hace es trabajar de manera sistemática problemas de los que"
+        },
+        {
+          "start": 55.56,
+          "end": 60.2,
+          "text": "no hay precedentes válidos o el contexto ha cambiado tanto que no son aplicables"
+        },
+        {
+          "start": 60.2,
+          "end": 61.2,
+          "text": "soluciones previas."
+        },
+        {
+          "start": 65.4,
+          "end": 69.96,
+          "text": "Bueno, hay un montón de gente. Por ejemplo, nosotros tenemos una compañía montada"
+        },
+        {
+          "start": 69.96,
+          "end": 75.04,
+          "text": "a medias con mi amigo José Luis Vallejo de Singular para resolución de problemática"
+        },
+        {
+          "start": 75.04,
+          "end": 79.16,
+          "text": "compleja. O sea, utilizamos sobre todo gente con skills específicos que pertenecen"
+        },
+        {
+          "start": 79.16,
+          "end": 85.44,
+          "text": "a la consultoría. Pero esto es otra historia completamente distinta. Aquí, digamos"
+        },
+        {
+          "start": 85.44,
+          "end": 89.88,
+          "text": "que la consultoría se premia al conocimiento específico de un área concreta, mientras"
+        },
+        {
+          "start": 89.88,
+          "end": 95.12,
+          "text": "que el complex problem solving lo que premia es la capacidad de navegar en medio de"
+        },
+        {
+          "start": 95.12,
+          "end": 100.84,
+          "text": "la niebla o sin un mapa definido o sin saber muy bien a dónde ir o cómo ejecutar,"
+        },
+        {
+          "start": 100.84,
+          "end": 103.24,
+          "text": "que en la consultoría se lo sabe porque es gente experta."
+        },
+        {
+          "start": 107.0,
+          "end": 111.24,
+          "text": "Bueno, hay dos fases muy separadas, muy diferenciadas dentro de la resolución de"
+        },
+        {
+          "start": 111.24,
+          "end": 115.32,
+          "text": "problemas complejos. La primera es la parte del sense making, o sea, la parte de entender"
+        },
+        {
+          "start": 115.32,
+          "end": 119.16,
+          "text": "qué es lo que está pasando ahí que no tienes ni idea. Y aquí fundamentalmente"
+        },
+        {
+          "start": 119.16,
+          "end": 126.36,
+          "text": "me nutro de gente que ha estado estudiando tanto en el seminario como en el máster"
+        },
+        {
+          "start": 126.36,
+          "end": 131.92,
+          "text": "con mis diferentes formaciones, en la UNIR, en INMUN, en los sitios donde yo imparto"
+        },
+        {
+          "start": 131.92,
+          "end": 136.6,
+          "text": "clase, y gente de altas capacidades, porque fundamentalmente la resolución de"
+        },
+        {
+          "start": 136.6,
+          "end": 141.36,
+          "text": "problemas complejos es una disciplina para gente... es de pensar, es de pensar"
+        },
+        {
+          "start": 141.36,
+          "end": 146.08,
+          "text": "duro. Y en la parte de ejecución el problema me determina el equipo."
+        },
+        {
+          "start": 146.08,
+          "end": 148.8,
+          "text": "Entonces yo lo que tengo que hacer es montar un equipo dependiendo de la"
+        },
+        {
+          "start": 148.8,
+          "end": 153.28,
+          "text": "hipótesis que hemos elaborado para solucionar el problema específico. Y"
+        },
+        {
+          "start": 153.28,
+          "end": 156.96,
+          "text": "aquí puede ser cualquier cosa. Aquí puedo necesitar un antropólogo, un"
+        },
+        {
+          "start": 156.96,
+          "end": 163.44,
+          "text": "criptógrafo, un submarinista o un experto en la Amazonía. O sea, es el"
+        },
+        {
+          "start": 175.0,
+          "end": 178.6,
+          "text": "Pues es que hemos trabajado en prácticamente todos los sectores. Una"
+        },
+        {
+          "start": 178.6,
+          "end": 184.36,
+          "text": "cosa que nos encargan mucho es el futuro de, ponga usted el sector que"
+        },
+        {
+          "start": 184.4,
+          "end": 189.36,
+          "text": "crea oportuno o el área que crea oportuna. O, oye, llevamos atascados con esto"
+        },
+        {
+          "start": 189.36,
+          "end": 192.64,
+          "text": "diez, quince años, no sabemos qué hacer, cómo podríamos abordar este"
+        },
+        {
+          "start": 192.64,
+          "end": 197.94,
+          "text": "tema. O, nuestro modelo de negocio está petardeando después de haber"
+        },
+        {
+          "start": 197.94,
+          "end": 201.04,
+          "text": "funcionado muy bien durante 30, 35 años. Cuál podría ser una"
+        },
+        {
+          "start": 201.04,
+          "end": 205.68,
+          "text": "reformulación de nuestra propuesta de valor que tuviera sentido. O, no"
+        },
+        {
+          "start": 205.68,
+          "end": 212.48,
+          "text": "tenemos ni idea de cómo cambia la inteligencia artificial, nuestra"
+        },
+        {
+          "start": 212.48,
+          "end": 215.52,
+          "text": "manera de hacer las cosas o nuestra propuesta de valor. Por el"
+        },
+        {
+          "start": 215.52,
+          "end": 219.44,
+          "text": "general lo que gestionamos es problemáticas sobre las que no hay"
+        },
+        {
+          "start": 219.44,
+          "end": 223.0,
+          "text": "una respuesta clara hacia dónde ir, problemáticas que llevan mucho tiempo"
+        },
+        {
+          "start": 223.0,
+          "end": 228.44,
+          "text": "estancadas o cosas delicadas que ahí podemos entrar desde relaciones"
+        },
+        {
+          "start": 228.44,
+          "end": 233.6,
+          "text": "personales a asuntos difíciles de tratar o particularmente delicados"
+        },
+        {
+          "start": 233.6,
+          "end": 237.52,
+          "text": "para la opinión pública o una combinación de todas estas cosas."
+        },
+        {
+          "start": 240.96,
+          "end": 247.04,
+          "text": "Todo, todo. Hemos trabajado para Ives 35 en problemas muy complejos que"
+        },
+        {
+          "start": 247.04,
+          "end": 250.36,
+          "text": "llevaba mucho tiempo atascados. Hemos trabajado en empresa familiar que"
+        },
+        {
+          "start": 250.36,
+          "end": 254.28,
+          "text": "tenemos una parte, o sea, a nosotros la empresa familiar nos gusta mucho y la"
+        },
+        {
+          "start": 254.28,
+          "end": 259.52,
+          "text": "trabajamos mucho porque trabajamos muchísimo lo que nosotros"
+        },
+        {
+          "start": 259.52,
+          "end": 262.92,
+          "text": "llamamos el factor X que tiene que ver con los comportamientos humanos"
+        },
+        {
+          "start": 262.92,
+          "end": 266.96,
+          "text": "aparentemente irracionales. Y la empresa familiar muchas veces ha sido"
+        },
+        {
+          "start": 267.08,
+          "end": 275.2,
+          "text": "abordada desde un ángulo más judicial, legislativo y cosas por el estilo que"
+        },
+        {
+          "start": 275.2,
+          "end": 280.04,
+          "text": "desde un punto de vista emocional, psicológico, antropológico. Y entonces"
+        },
+        {
+          "start": 280.04,
+          "end": 283.28,
+          "text": "de resulta de ello pues a nosotros nos gustan mucho las empresas"
+        },
+        {
+          "start": 283.28,
+          "end": 286.08,
+          "text": "familiares. Y luego hemos trabajado con Pymes, pero hemos trabajado con"
+        },
+        {
+          "start": 286.08,
+          "end": 290.56,
+          "text": "startups, hemos trabajado con prácticamente con cualquier... De hecho"
+        },
+        {
+          "start": 290.56,
+          "end": 294.44,
+          "text": "por ejemplo nosotros aprendimos nuestro oficio con Pymes porque es"
+        },
+        {
+          "start": 294.44,
+          "end": 297.64,
+          "text": "que no teníamos ninguna referencia, no teníamos ninguna compañía donde"
+        },
+        {
+          "start": 297.64,
+          "end": 300.92,
+          "text": "mirar y decir oye pues que..."
+        }
+      ]
+    }
+  ]
+}

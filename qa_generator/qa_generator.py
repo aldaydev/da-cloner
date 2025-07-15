@@ -27,25 +27,29 @@ def generar_dataset_qa(transcription_files, personaje):
             with open(transcription_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
 
-            speakers = data.get("speakers", [])
-            if len(speakers) != 2:
-                continue  # Solo procesamos entrevistas con 2 speakers
+            # Filtro: solo procesar si se ha identificado entrevistador y entrevistado
+            interviewer = data.get("interviewer")
+            interviewee = data.get("interviewee")
+            if interviewer is not None and interviewee is not None:
+                speakers = data.get("speakers", [])
+                if len(speakers) != 2:
+                    continue  # Solo procesamos entrevistas con 2 speakers
 
-            # Asumimos que SPEAKER_00 es entrevistador y SPEAKER_01 es entrevistado
-            preguntas = [seg["text"].strip() for seg in speakers[0]["segments"] if "?" in seg["text"]]
-            respuestas = [seg["text"].strip() for seg in speakers[1]["segments"]]
+                # Asumimos que SPEAKER_00 es entrevistador y SPEAKER_01 es entrevistado
+                preguntas = [seg["text"].strip() for seg in speakers[0]["segments"] if "?" in seg["text"]]
+                respuestas = [seg["text"].strip() for seg in speakers[1]["segments"]]
 
-            # Emparejamos cada pregunta con la siguiente respuesta disponible
-            for pregunta, respuesta in zip(preguntas, respuestas):
-                if len(pregunta.split()) < 3 or len(respuesta.split()) < 5:
-                    continue  # ignoramos pares muy cortos
-                conversacion = [
-                    system_prompt,
-                    {"role": "user", "content": pregunta},
-                    {"role": "assistant", "content": respuesta}
-                ]
-                out_file.write(json.dumps({"messages": conversacion}, ensure_ascii=False) + "\n")
-                total_pares += 1
+                # Emparejamos cada pregunta con la siguiente respuesta disponible
+                for pregunta, respuesta in zip(preguntas, respuestas):
+                    if len(pregunta.split()) < 3 or len(respuesta.split()) < 5:
+                        continue  # ignoramos pares muy cortos
+                    conversacion = [
+                        system_prompt,
+                        {"role": "user", "content": pregunta},
+                        {"role": "assistant", "content": respuesta}
+                    ]
+                    out_file.write(json.dumps({"messages": conversacion}, ensure_ascii=False) + "\n")
+                    total_pares += 1
 
     print(f"\n✅ Dataset generado en {output_path} con {total_pares} ejemplos Q&A.")
     return output_path
