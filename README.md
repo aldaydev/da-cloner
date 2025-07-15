@@ -1,5 +1,36 @@
 # da-cloner
 
+## Resumen final de pasos:
+
+1. Recopilar vídeos de youtube
+    - Entrada: nombre del personaje
+    - Deben incluir el nombre introducido bien en el nombre, bien en la descripción
+    - Si no hay un número mínimo horas, se lo indicamos al usuario y paramos el programa
+    - Salida: Colección de objetos con los datos de cada vídeo (url)
+
+2. Descargar los audios
+    - Entrada: colección con las urls
+    - Descarga y almacenamiento en formato wav (propicio para whisperX)
+    - Salida: Colección con las ubicaciones de los audios
+
+3. Diarización y transcripción
+    - Entrada: Colección con las ubicaciones de los audios
+    - Generamos por cada audio un json con la transcripción, dividida por "speakers"
+    - Salida: Colección con las ubicaciones de los json
+
+4. Identificación de speakers
+    - Entrada: Colección con las ubicaciones de los json
+    - Se descartarán json con más de 2 speakers
+    - Se identificará a cada speaker (si es posible) entre "entrevistador" y "entrevistado"
+    - Salida: Llamará a la función para generar un jsonL con pares Q&A
+
+5. Generar pares Q&A
+    - Entrada: Ubicación del json, entrevistador, entrevistado, output_path
+    - Generamos el system prompt 
+    - Generamos los pares Q&A que se irán añadiendo al jsonL
+    - Salida: obtendremos un jsonL para poder entrenar un modelo
+
+
 Ejecutar el entorno en power shell: .\venv\Scripts\Activate
 
 ## Paso 4: Identificar y recopilar las palabras del entrevistado

@@ -22,6 +22,7 @@ def main():
         print("❌ No se encontraron vídeos adecuados.")
         return
 
+    # 🔎 Verificar duración total mínima
     DURACION_MINIMA_SEGUNDOS = 6200  # 2 horas
     duracion_total = sum(video["duration_seconds"] for video in videos)
 
@@ -32,7 +33,6 @@ def main():
 
     print(f"\n🎧 Descargando audios de {len(videos)} vídeos...")
     audio_paths = []
-    metadata_list = []
 
     for video in videos:
         print(f"\n🎬 Título: {video['title']}")
@@ -43,12 +43,6 @@ def main():
         if audio_path:
             print(f"✅ Audio descargado: {audio_path}")
             audio_paths.append(audio_path)
-            # Guardamos metadatos para este audio
-            metadata_list.append({
-                "personaje": personaje,
-                "title": video["title"],
-                "url": video["url"]
-            })
         else:
             print("⚠️ Falló la descarga de este vídeo.")
 
@@ -63,19 +57,17 @@ def main():
         print("❌ Token de Hugging Face no encontrado. Verifica tu archivo .env.")
         return
 
-    # Pasamos también metadata_list a la función
-    transcription_files = diarize_and_transcribe(audio_paths, hf_token, metadata_list)
+    transcription_files = diarize_and_transcribe(audio_paths, hf_token)
 
     if transcription_files:
         print("\n📁 Transcripciones generadas:")
         for f in transcription_files:
             print(f" - {f}")
-
-        print("\n🚀 Generando dataset Q&A final...")
-        output_path = generar_dataset_qa(transcription_files, personaje)
-        print(f"\n✅ Proceso completo. Dataset generado en: {output_path}")
     else:
         print("⚠️ No se generaron transcripciones.")
+    
+    dataset_path = generar_dataset_qa(transcription_files, personaje)
+    print(f"\n📚 Dataset final disponible en: {dataset_path}")
 
 if __name__ == "__main__":
     main()

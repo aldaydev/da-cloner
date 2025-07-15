@@ -6,34 +6,20 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def diarize_and_transcribe(audio_paths, hf_token, metadata_list=None):
-    """
-    :param audio_paths: Lista de rutas a archivos de audio.
-    :param hf_token: Token de Hugging Face.
-    :param metadata_list: Lista de dicts con metadatos por audio.
-                          Si no se proporciona, se usarán valores por defecto.
-    """
+def diarize_and_transcribe(audio_paths, hf_token):
+    # Cargar modelo Whisper
     model = WhisperModel("medium", device="cpu", compute_type="int8")
+
+    # Cargar pipeline de diarización
     pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization",
                                         use_auth_token=hf_token)
 
     output_files = []
 
-    for idx, path in enumerate(audio_paths):
+    for path in audio_paths:
         print(f"\n🎧 Procesando archivo: {path}")
 
-        # Usar metadatos reales si se proporcionan, si no usar valores de prueba
-        metadata = metadata_list[idx] if metadata_list and idx < len(metadata_list) else {
-            "personaje": "Ejemplo Personaje",
-            "title": "Título de ejemplo",
-            "url": "https://youtube.com/ejemplo"
-        }
-
-        personaje = metadata.get("personaje", "Desconocido")
-        video_title = metadata.get("title", "Sin título")
-        video_url = metadata.get("url", "")
-
-        # Diarización
+        # Aplicar diarización
         diarization = pipeline(path)
 
         print("🔊 Diarización:")
@@ -42,13 +28,14 @@ def diarize_and_transcribe(audio_paths, hf_token, metadata_list=None):
 
         print("\n📝 Transcripción:")
         segments, _ = model.transcribe(path, vad_filter=True, language="es")
-        segments = list(segments)
+        segments = list(segments)  # convertir generator a lista
 
         print(f"Total segmentos transcritos: {len(segments)}")
         for segment in segments:
             print(f"[{segment.start:.1f}s - {segment.end:.1f}s] {segment.text.strip()}")
 
-        # Asignar speakers a segmentos
+        # --- Cruzar diarización con transcripción ---
+
         speaker_texts = {}
         turns = []
         for turn, _, speaker in diarization.itertracks(yield_label=True):
@@ -89,11 +76,7 @@ def diarize_and_transcribe(audio_paths, hf_token, metadata_list=None):
                 "text": seg_text
             })
 
-        # Construir estructura final
         transcription_data = {
-            "personaje": personaje,
-            "video_title": video_title,
-            "video_url": video_url,
             "audio_file": path,
             "speakers": []
         }
@@ -120,7 +103,6 @@ def diarize_and_transcribe(audio_paths, hf_token, metadata_list=None):
     return output_files
 
 
-# 👇 Ejecutar directamente con audio de prueba y metadatos ficticios
 if __name__ == "__main__":
     hf_token = os.environ.get("HUGGINGFACE_TOKEN")
 
@@ -131,11 +113,4 @@ if __name__ == "__main__":
         if not os.path.exists(default_audio):
             print(f"❌ No se encontró el archivo {default_audio}")
         else:
-            # Metadatos de prueba para este archivo
-            fake_metadata = [{
-                "personaje": "Ejemplo de Personaje",
-                "title": "Audio de prueba local",
-                "url": "https://youtube.com/watch?v=ejemplo"
-            }]
-
-            diarize_and_transcribe([default_audio], hf_token, fake_metadata)
+            diarize_and_transcribe([default_audio], hf_token)

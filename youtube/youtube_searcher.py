@@ -9,7 +9,7 @@ API_KEY = os.getenv("YOUTUBE_API_KEY")
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 
-def search_youtube(query, max_results=5):
+def search_youtube(query, max_results=50):
     # 🔍 Enriquecer el término de búsqueda
     enriched_query = f'"{query}" entrevista OR conferencia OR charla OR ponencia OR podcast'
 
@@ -33,6 +33,9 @@ def search_youtube(query, max_results=5):
         id=",".join(video_ids)
     ).execute()
 
+    # Preprocesar el nombre
+    nombre_completo = query.strip().lower()
+
     videos = []
     for item in video_response.get("items", []):
         video_id = item["id"]
@@ -52,6 +55,11 @@ def search_youtube(query, max_results=5):
         # if duration < 240 or duration > 600:
         #     continue
 
+        # Filtro de coincidencia exacta del nombre completo
+        texto_combinado = f"{title} {description}".lower()
+        if nombre_completo not in texto_combinado:
+            continue
+
         url = f"https://www.youtube.com/watch?v={video_id}"
 
         videos.append({
@@ -69,7 +77,7 @@ def search_youtube(query, max_results=5):
 
 if __name__ == "__main__":
     query = "Javier González Recuenco"
-    results = youtube_search(query)
+    results = search_youtube(query)
 
     for video in results:
         print(f"🎬 {video['title']}")
