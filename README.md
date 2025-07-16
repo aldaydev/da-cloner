@@ -39,13 +39,13 @@ Ejecutar el entorno en power shell: .\venv\Scripts\Activate
 python youtube/youtube_searcher.py
 python downloader/audio_downloader.py
 python transcriber/transcriber.py
+python partial-test.py ==> Prueba partiendo de una transcripción, identifica entrevistador y entrevistado, y genera el dataset
 
 
 ## Paso 4: Identificar y recopilar las palabras del entrevistado
 
 ## Paso 3: Seleccionar el speaker del que queremos obtener información
 
-Te cuento yo el programa que tengo en mente. Tenemos varias variables:
 
 MORE_WORDS => asignaremos el speaker que tiene un % mayor de palabras
 MORE_QUESTIONS => asignaremos el speaker con más preguntas (¿?)

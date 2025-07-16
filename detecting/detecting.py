@@ -1,75 +1,138 @@
-def detect_roles_from_files(file_paths, personaje):
-    resultados = {}
+# Para ejecutarlo aislado: python detecting/detecting.py transcriptions/audio-test_transcription.json "Javier González"
 
-    for file_path in file_paths:
-        print(f"\n🔍 Analizando archivo: {file_path}")
+import json
+from collections import defaultdict
+import sys
 
-        try:
-            with open(file_path, "r", encoding="utf-8") as f:
-                data = json.load(f)
-        except Exception as e:
-            print(f"❌ Error al leer {file_path}: {e}")
-            continue
+def detect_roles_from_file(file_path, personaje):
+    with open(file_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
 
-        # Aplanar estructura
+    # Adaptar la estructura: convertir JSON complejo a lista plana de bloques
+    if isinstance(data, dict) and "speakers" in data:
         bloques = []
-        if isinstance(data, dict) and "speakers" in data:
-            for speaker_data in data["speakers"]:
-                speaker_name = speaker_data.get("speaker", "Unknown")
-                for segment in speaker_data.get("segments", []):
-                    bloques.append({
-                        "speaker": speaker_name,
-                        "text": segment.get("text", "")
-                    })
-        else:
-            print(f"❌ Formato inválido en archivo: {file_path}")
-            continue
+        for speaker_data in data["speakers"]:
+            speaker_name = speaker_data.get("speaker", "Unknown")
+            for segment in speaker_data.get("segments", []):
+                bloques.append({
+                    "speaker": speaker_name,
+                    "text": segment.get("text", "")
+                })
+        
+    else:
+        print("❌ Error: El JSON debe ser una lista de bloques con 'speaker' y 'text'.")
+        sys.exit(1)
 
-        speakers = get_speakers(bloques)
-        if len(speakers) > 2:
-            print(f"⚠️ Más de 2 hablantes detectados en {file_path}. Se omite.")
-            resultados[file_path] = {
-                "interviewer": None,
-                "interviewee": None
-            }
-            continue
+    speakers = get_speakers(bloques)
+    speakers_count = len(speakers)
+    if speakers_count > 2:
+        print(f"⚠️ Se detectaron {speakers_count} hablantes. Solo se admite análisis con máximo 2.")
+        return {
+            "interviewer": None,
+            "interviewee": None
+        }
 
-        name_variants = generar_variantes_de_nombre(personaje)
+    name_variants = generar_variantes_de_nombre(personaje)
 
-        more_words = get_more_words(bloques)
-        more_questions = get_more_questions(bloques)
-        interpellate = get_interpellate(bloques, name_variants)
-        welcome_speaker = get_welcome_speaker(bloques)
+    more_words = get_more_words(bloques)
+    more_questions = get_more_questions(bloques)
+    interpellate = get_interpellate(bloques, name_variants)
+    welcome_speaker = get_welcome_speaker(bloques)
 
-        print("DEBUG:")
-        print("MORE_WORDS =>", more_words)
-        print("MORE_QUESTIONS =>", more_questions)
-        print("INTERPELLATE =>", interpellate)
-        print("WELCOME_SPEAKER =>", welcome_speaker)
+    print("DEBUG:")
+    print("MORE_WORDS =>", more_words)
+    print("MORE_QUESTIONS =>", more_questions)
+    print("INTERPELLATE =>", interpellate)
+    print("WELCOME_SPEAKER =>", welcome_speaker)
 
+    # Lógica de inferencia
 
-        # Lógica de inferencia
-        interviewer = None
-        interviewee = None
-        # Caso 1: los tres factores coinciden y es distinto de more_words
-        if more_questions == interpellate and more_questions == welcome_speaker and more_words != more_questions:
-            interviewer = more_questions
-        else:
-            # Caso 2: algún speaker coincide en al menos dos de los tres factores y es distinto de more_words
-            candidates = [more_questions, interpellate, welcome_speaker]
-            for s in speakers:
-                if candidates.count(s) >= 2 and s != more_words:
-                    interviewer = s
-                    break
-        if interviewer:
-            interviewee = [s for s in speakers if s != interviewer][0]
-        resultados[file_path] = {
+    #El caso más seguro
+    if more_questions == interpellate and more_questions == welcome_speaker and more_words != more_questions:
+        interviewer = more_questions
+        interviewee = [s for s in speakers if s != interviewer][0]
+        return {
             "interviewer": interviewer,
             "interviewee": interviewee
         }
 
-        print(f"🎯 Resultado para {file_path}:")
-        print(f"   🗣️ Entrevistador: {interviewer}")
-        print(f"   🎤 Entrevistado: {interviewee}")
+    if more_questions == interpellate:
+        interviewer = more_questions
+        interviewee = [s for s in speakers if s != interviewer][0]
+    elif more_questions == more_words:
+        interviewer = more_questions
+        interviewee = [s for s in speakers if s != interviewer][0]
+    elif interpellate == more_words:
+        interviewer = interpellate
+        interviewee = [s for s in speakers if s != interviewer][0]
+    else:
+        interviewer = more_questions
+        interviewee = [s for s in speakers if s != interviewer][0]
 
-    return resultados
+    return {
+        "interviewer": interviewer,
+        "interviewee": interviewee
+    }
+
+def get_speakers(bloques):
+    return list({bloque["speaker"] for bloque in bloques})
+
+def generar_variantes_de_nombre(nombre):
+    partes = nombre.strip().lower().split()
+    variantes = set()
+
+    if not partes:
+        return []
+
+    for i in range(len(partes)):
+        for j in range(i+1, len(partes)+1):
+            variantes.add(" ".join(partes[i:j]))
+
+    return list(variantes)
+
+def get_more_words(bloques):
+    palabras_por_speaker = defaultdict(int)
+    for bloque in bloques:
+        palabras_por_speaker[bloque["speaker"]] += len(bloque["text"].split())
+    return max(palabras_por_speaker.items(), key=lambda x: x[1])[0]
+
+def get_more_questions(bloques):
+    preguntas_por_speaker = defaultdict(int)
+    for bloque in bloques:
+        preguntas_por_speaker[bloque["speaker"]] += bloque["text"].count("?")
+    return max(preguntas_por_speaker.items(), key=lambda x: x[1])[0]
+
+def get_interpellate(bloques, variantes_nombre):
+    menciones = defaultdict(int)
+    for bloque in bloques:
+        texto = bloque["text"].lower()
+        for variante in variantes_nombre:
+            if variante in texto:
+                menciones[bloque["speaker"]] += 1
+    if menciones:
+        return max(menciones.items(), key=lambda x: x[1])[0]
+    else:
+        return None
+
+def get_welcome_speaker(bloques):
+    for bloque in bloques:
+        texto = bloque["text"].lower()
+        if "bienvenido" in texto or "bienvenida" in texto:
+            return bloque["speaker"]
+    return None
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Uso: python detecting/detecting.py <ruta_al_json> <nombre_personaje>")
+        print("Ejemplo: python detecting/detecting.py transcriptions/audio-test_transcription.json \"Javier González\"")
+        sys.exit(1)
+
+    file_path = sys.argv[1]
+    personaje = sys.argv[2]
+
+    resultado = detect_roles_from_file(file_path, personaje)
+
+    print("\n🎯 Resultado:")
+    print(f"🗣️ Entrevistador: {resultado['interviewer']}")
+    print(f"🎤 Entrevistado: {resultado['interviewee']}")

@@ -3,6 +3,14 @@ from youtube.youtube_searcher import search_youtube
 from downloader.audio_downloader import download_audio
 from transcriber.transcriber import diarize_and_transcribe
 from qa_generator.qa_generator import generar_dataset_qa
+from detecting.detecting import detect_roles_from_file
+
+# Implementación local para lista de archivos
+def detect_roles_from_files(file_paths, personaje):
+    resultados = {}
+    for file_path in file_paths:
+        resultados[file_path] = detect_roles_from_file(file_path, personaje)
+    return resultados
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -71,9 +79,29 @@ def main():
         for f in transcription_files:
             print(f" - {f}")
 
-        print("\n🚀 Generando dataset Q&A final...")
-        output_path = generar_dataset_qa(transcription_files, personaje)
-        print(f"\n✅ Proceso completo. Dataset generado en: {output_path}")
+        # Detectar roles en las transcripciones
+        roles = detect_roles_from_files(transcription_files, personaje)
+        archivos_validos = []
+        for f in transcription_files:
+            role_info = roles.get(f, {})
+            interviewer = role_info.get("interviewer")
+            interviewee = role_info.get("interviewee")
+            if interviewer and interviewee:
+                # Añadir los campos al JSON de la transcripción
+                with open(f, "r", encoding="utf-8") as file_in:
+                    data = json.load(file_in)
+                data["interviewer"] = interviewer
+                data["interviewee"] = interviewee
+                with open(f, "w", encoding="utf-8") as file_out:
+                    json.dump(data, file_out, ensure_ascii=False, indent=2)
+                archivos_validos.append(f)
+
+        if archivos_validos:
+            print("\n🚀 Generando dataset Q&A solo con transcripciones válidas...")
+            output_path = generar_dataset_qa(archivos_validos, personaje)
+            print(f"\n✅ Proceso completo. Dataset generado en: {output_path}")
+        else:
+            print("⚠️ No se identificó entrevistador/entrevistado en ninguna transcripción.")
     else:
         print("⚠️ No se generaron transcripciones.")
 

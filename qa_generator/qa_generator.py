@@ -35,21 +35,48 @@ def generar_dataset_qa(transcription_files, personaje):
                 if len(speakers) != 2:
                     continue  # Solo procesamos entrevistas con 2 speakers
 
-                # Asumimos que SPEAKER_00 es entrevistador y SPEAKER_01 es entrevistado
-                preguntas = [seg["text"].strip() for seg in speakers[0]["segments"] if "?" in seg["text"]]
-                respuestas = [seg["text"].strip() for seg in speakers[1]["segments"]]
+                # Crear una lista de todos los segmentos y ordenarlos por 'start'
+                all_segments = []
+                for speaker_data in speakers:
+                    for seg in speaker_data["segments"]:
+                        all_segments.append({
+                            "speaker": speaker_data["speaker"],
+                            "text": seg["text"].strip(),
+                            "is_question": "?" in seg["text"] and speaker_data["speaker"] == interviewer,
+                            "start": seg.get("start", 0)
+                        })
+                all_segments.sort(key=lambda x: x["start"])
 
-                # Emparejamos cada pregunta con la siguiente respuesta disponible
-                for pregunta, respuesta in zip(preguntas, respuestas):
-                    if len(pregunta.split()) < 3 or len(respuesta.split()) < 5:
-                        continue  # ignoramos pares muy cortos
-                    conversacion = [
-                        system_prompt,
-                        {"role": "user", "content": pregunta},
-                        {"role": "assistant", "content": respuesta}
-                    ]
-                    out_file.write(json.dumps({"messages": conversacion}, ensure_ascii=False) + "\n")
-                    total_pares += 1
+                i = 0
+                while i < len(all_segments):
+                    seg = all_segments[i]
+                    if seg["is_question"]:
+                        pregunta = seg["text"]
+                        respuesta_segmentos = []
+                        j = i + 1
+                        while j < len(all_segments):
+                            if all_segments[j]["speaker"] == interviewee:
+                                respuesta_segmentos.append(all_segments[j]["text"])
+                            elif all_segments[j]["speaker"] == interviewer and all_segments[j]["is_question"]:
+                                break
+                            elif all_segments[j]["speaker"] == interviewer and not all_segments[j]["is_question"]:
+                                # Si el entrevistador hace un comentario, lo ignoramos y seguimos buscando respuesta
+                                pass
+                            j += 1
+                        respuesta = " ".join(respuesta_segmentos).strip()
+                        print(f"\nPregunta: {pregunta}")
+                        print(f"Respuesta generada: {respuesta}")
+                        print(f"Longitud pregunta: {len(pregunta.split())} palabras, longitud respuesta: {len(respuesta.split())} palabras")
+                        conversacion = [
+                            system_prompt,
+                            {"role": "user", "content": pregunta},
+                            {"role": "assistant", "content": respuesta}
+                        ]
+                        out_file.write(json.dumps({"messages": conversacion}, ensure_ascii=False) + "\n")
+                        total_pares += 1
+                        i = j
+                    else:
+                        i += 1
 
     print(f"\n✅ Dataset generado en {output_path} con {total_pares} ejemplos Q&A.")
     return output_path
