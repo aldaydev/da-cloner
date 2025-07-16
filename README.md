@@ -47,6 +47,10 @@ python transcriber/transcriber.py
 python partial-test.py ==> Prueba partiendo de una transcripción, identifica entrevistador y entrevistado, y genera el dataset
 
 
+----------------------------------
+Notas varias
+
+
 ## Paso 4: Identificar y recopilar las palabras del entrevistado
 
 ## Paso 3: Seleccionar el speaker del que queremos obtener información
