@@ -47,7 +47,8 @@ def detect_roles_from_file(file_path, personaje):
 
     # Lógica de inferencia
 
-    #El caso más seguro
+
+    # Caso más seguro: las tres heurísticas coinciden y more_words es diferente
     if more_questions == interpellate and more_questions == welcome_speaker and more_words != more_questions:
         interviewer = more_questions
         interviewee = [s for s in speakers if s != interviewer][0]
@@ -56,23 +57,39 @@ def detect_roles_from_file(file_path, personaje):
             "interviewee": interviewee
         }
 
-    if more_questions == interpellate:
-        interviewer = more_questions
+    # Nuevo caso: si dos de las tres heurísticas coinciden y more_words es diferente
+    heuristics = [more_questions, interpellate, welcome_speaker]
+    # Filtrar None
+    heuristics_filtered = [h for h in heuristics if h is not None]
+    # Contar ocurrencias
+    from collections import Counter
+    counts = Counter(heuristics_filtered)
+    most_common = counts.most_common(1)
+    if most_common and most_common[0][1] == 2 and more_words != most_common[0][0]:
+        interviewer = most_common[0][0]
         interviewee = [s for s in speakers if s != interviewer][0]
-    elif more_questions == more_words:
-        interviewer = more_questions
-        interviewee = [s for s in speakers if s != interviewer][0]
-    elif interpellate == more_words:
-        interviewer = interpellate
-        interviewee = [s for s in speakers if s != interviewer][0]
-    else:
-        interviewer = more_questions
-        interviewee = [s for s in speakers if s != interviewer][0]
+        return {
+            "interviewer": interviewer,
+            "interviewee": interviewee
+        }
 
-    return {
-        "interviewer": interviewer,
-        "interviewee": interviewee
-    }
+    # if more_questions == interpellate:
+    #     interviewer = more_questions
+    #     interviewee = [s for s in speakers if s != interviewer][0]
+    # elif more_questions == more_words:
+    #     interviewer = more_questions
+    #     interviewee = [s for s in speakers if s != interviewer][0]
+    # elif interpellate == more_words:
+    #     interviewer = interpellate
+    #     interviewee = [s for s in speakers if s != interviewer][0]
+    # else:
+    #     interviewer = more_questions
+    #     interviewee = [s for s in speakers if s != interviewer][0]
+
+    # return {
+    #     "interviewer": interviewer,
+    #     "interviewee": interviewee
+    # }
 
 def get_speakers(bloques):
     return list({bloque["speaker"] for bloque in bloques})
@@ -110,16 +127,24 @@ def get_interpellate(bloques, variantes_nombre):
             if variante in texto:
                 menciones[bloque["speaker"]] += 1
     if menciones:
-        return max(menciones.items(), key=lambda x: x[1])[0]
+        speakers_with_mentions = [speaker for speaker, count in menciones.items() if count > 0]
+        if len(speakers_with_mentions) == 1:
+            return speakers_with_mentions[0]
+        else:
+            return None
     else:
         return None
 
 def get_welcome_speaker(bloques):
+    speakers_welcome = set()
     for bloque in bloques:
         texto = bloque["text"].lower()
         if "bienvenido" in texto or "bienvenida" in texto:
-            return bloque["speaker"]
-    return None
+            speakers_welcome.add(bloque["speaker"])
+    if len(speakers_welcome) == 1:
+        return list(speakers_welcome)[0]
+    else:
+        return None
 
 
 if __name__ == "__main__":

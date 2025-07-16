@@ -23,6 +23,11 @@
     - Entrada: Colección con las ubicaciones de los json
     - Se descartarán json con más de 2 speakers
     - Se identificará a cada speaker (si es posible) entre "entrevistador" y "entrevistado"
+    * Tenemos 4 factores: 
+    more_words = Quien dice más % de palabras
+    more_questions = Quien hace más preguntas
+    interpellate = Quien interpela al entrevistado (solo se asigna si solo uno de los dos speakers dice una de las variantes del nombre del entrevistado)
+    welcome_speaker = Quien dice "bienvenido" o "bienvenida" (solo se asigna si solo uno de los dos speaker dice esas palabras)
     - Salida: Llamará a la función para generar un jsonL con pares Q&A
 
 5. Generar pares Q&A
